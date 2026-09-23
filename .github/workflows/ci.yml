@@ -44,15 +44,14 @@ jobs:
       - name: Verify SPI JAR
         run: |
           echo "Generated JAR:"
-          ls -lh partial-auth-import/target/
-
+          ls -lh partialImport/target/
           test -f \
-            partial-auth-import/target/kc-partial-auth-import.jar
+            partialImport/target/kc-partial-auth-import.jar
 
       - name: Verify service registration
         run: |
           unzip -p \
-            partial-auth-import/target/kc-partial-auth-import.jar \
+            partialImport/target/kc-partial-auth-import.jar \
             META-INF/services/org.keycloak.services.resources.admin.ext.AdminRealmResourceProviderFactory
 
       - name: Setup Docker Buildx
