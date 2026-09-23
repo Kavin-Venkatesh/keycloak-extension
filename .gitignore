@@ -1,0 +1,14 @@
+target/
+**/target/
+
+.idea/
+.vscode/
+*.iml
+
+.DS_Store
+
+.env
+*.log
+
+*.pem
+*.key
