@@ -29,11 +29,13 @@ jobs:
 
           script: |
             set -e
-
+            
             cd ~/keycloak
+        
+            SHORT_SHA=$(echo "${{ github.event.workflow_run.head_sha }}" | cut -c1-7)
 
-            IMAGE="ghcr.io/kavin-venkatesh/keycloak-extension:sha-${{ github.event.workflow_run.head_sha }}"
-
+            IMAGE="ghcr.io/kavin-venkatesh/keycloak-extension:sha-${SHORT_SHA}"
+      
             echo "======================================"
             echo "Deploying Keycloak"
             echo "Image: $IMAGE"
