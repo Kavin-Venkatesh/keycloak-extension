@@ -1,0 +1,70 @@
+name: Deploy Keycloak
+
+on:
+  workflow_run:
+    workflows:
+      - Build and Publish Keycloak
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+
+  deploy:
+    name: Deploy to EC2
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+
+          script: |
+            set -e
+
+            cd ~/keycloak
+
+            IMAGE="ghcr.io/kavin-venkatesh/keycloak-extension:sha-${{ github.event.workflow_run.head_sha }}"
+
+            echo "======================================"
+            echo "Deploying Keycloak"
+            echo "Image: $IMAGE"
+            echo "======================================"
+
+            echo "Pulling Docker image..."
+            docker pull "$IMAGE"
+
+            echo "Starting PostgreSQL..."
+            docker compose up -d postgres
+
+            echo "Deploying Keycloak..."
+            export KEYCLOAK_IMAGE="$IMAGE"
+
+            docker compose up -d --force-recreate keycloak
+
+            echo "Waiting for Keycloak..."
+            sleep 15
+
+            echo "======================================"
+            echo "Container status"
+            echo "======================================"
+
+            docker compose ps
+
+            echo "======================================"
+            echo "Keycloak logs"
+            echo "======================================"
+
+            docker logs --tail 100 keycloak
+
+            echo "======================================"
+            echo "Deployment completed"
+            echo "======================================"
