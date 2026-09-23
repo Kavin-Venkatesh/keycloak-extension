@@ -25,7 +25,7 @@
     </properties>
 
     <modules>
-        <module>partial-auth-import</module>
+        <module>partialImport</module>
     </modules>
 
 </project>
