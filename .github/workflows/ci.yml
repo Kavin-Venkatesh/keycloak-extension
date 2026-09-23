@@ -61,7 +61,7 @@ jobs:
           echo "Authenticator registration:"
 
           unzip -p \
-            logging-authenticator/target/kc-logging-authenticator.jar \
+            logging-authenticato/target/kc-logging-authenticator.jar \
             META-INF/services/org.keycloak.authentication.AuthenticatorFactory
           
 
