@@ -47,12 +47,23 @@ jobs:
           ls -lh partialImport/target/
           test -f \
             partialImport/target/kc-partial-auth-import.jar
+          test -f \
+            logging-authenticato/target/kc-logging-authenticator.jar
 
       - name: Verify service registration
         run: |
           unzip -p \
             partialImport/target/kc-partial-auth-import.jar \
             META-INF/services/org.keycloak.services.resources.admin.ext.AdminRealmResourceProviderFactory
+
+      - name: Verify logging authenticator registration
+        run: |
+          echo "Authenticator registration:"
+
+          unzip -p \
+            logging-authenticator/target/kc-logging-authenticator.jar \
+            META-INF/services/org.keycloak.authentication.AuthenticatorFactory
+          
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
