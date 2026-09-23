@@ -90,6 +90,8 @@ public class PartialAuthImportResourceProvider implements AdminRealmResourceProv
         permissionEvaluator.realm().requireManageRealm();
 
         try {
+
+            LOG.infof("Entered the partial import SPI provider ")
             return Response.ok(
                     KeycloakModelUtils.runJobInTransactionWithResult(session.getKeycloakSessionFactory(), session.getContext(), kcSession -> {
                         RealmModel kcRealm = kcSession.realms().getRealm(
